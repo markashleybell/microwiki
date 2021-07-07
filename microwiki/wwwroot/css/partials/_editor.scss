@@ -1,3 +1,5 @@
+@import 'variables';
+
 .body-editor-buttons {
     padding: 10px 0;
 
@@ -12,4 +14,20 @@
 
 .tab-content {
     min-height: 651px;
+}
+
+$tab-border-color: #bebebe;
+
+.nav-tabs {
+    border-bottom: 1px solid $tab-border-color;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: $main-background-color;
+    border-color: $tab-border-color $tab-border-color $main-background-color;
+}
+
+.editor-dropzone {
+    height: 100px;
+    background-color: #999;
 }

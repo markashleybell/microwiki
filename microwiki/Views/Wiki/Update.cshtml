@@ -15,18 +15,21 @@
     <div class="@ContentColumnClasses">
         <h1>Update Page</h1>
         <form asp-controller="Wiki" asp-action="Update" method="post">
-            <div class="form-group">
-                <label asp-for="Title">Page Title</label>
+
+            <div class="mb-2">
+                <label asp-for="Title" class="form-label">Page Title</label>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title"></span>
             </div>
-            <div class="form-check">
+
+            <div class="mb-2 form-check form-switch">
                 <input asp-for="IsPublic" class="form-check-input" />
-                <label asp-for="IsPublic">Public?</label>
+                <label asp-for="IsPublic" class="form-check-label">Public</label>
                 <span asp-validation-for="IsPublic"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Tags">Tags</label>
+
+            <div class="mb-2">
+                <label asp-for="Tags" class="form-label">Tags</label>
                 <input asp-for="Tags" class="form-control tag-input" />
                 <span asp-validation-for="Tags"></span>
             </div>
@@ -37,29 +40,35 @@
             }
             else
             {
-                <div class="form-group">
-                    <label asp-for="Slug">Url Slug</label>
+                <div class="mb-2">
+                    <label asp-for="Slug" class="form-label">Url Slug</label>
                     <input asp-for="Slug" class="form-control" />
                     <span asp-validation-for="Slug"></span>
                     <small class="form-text text-muted">If blank, this will be regenerated automatically from the title.</small>
                 </div>
             }
 
-            <div class="form-group">
+            <div class="mb-2 mt-4">
                 <editor asp-for="Body" />
             </div>
 
             <input asp-for="ID" type="hidden" />
-            <input asp-for="IsRootDocument" type="hidden" />
             <input asp-for="ParentID" type="hidden" />
+            <input asp-for="IsRootDocument" type="hidden" />
 
-            <div class="form-group form-group-submit">
-                <button type="submit" class="@SaveButtonClasses"><i class="fa fa-floppy-o"></i> Save Page</button>
+            <div class="mt-4 mb-2">
+                <button type="submit" class="@SaveButtonClasses"><i class="bi-save2-fill"></i> Save Page</button>
             </div>
         </form>
     </div>
     <div class="@ActionColumnClasses">
-        <p><a asp-controller="Files" asp-action="Upload" target="_blank" class="@ActionButtonClasses">Upload File</a></p>
+        <div class="d-grid gap-2">
+            <a asp-controller="Files" asp-action="Upload" target="_blank" class="@ActionButtonClasses">Upload File</a>
+        </div>
+
+        <form asp-controller="Files" asp-action="Upload" method="post" enctype="multipart/form-data" class="editor-dropzone">
+            <input asp-for="FilenamePrefix" type="hidden" />
+        </form>
     </div>
 </div>
 

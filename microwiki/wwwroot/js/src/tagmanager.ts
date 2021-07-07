@@ -1,6 +1,5 @@
 import { ITag, TagInput } from 'mab-bootstrap-taginput';
-
-import 'mab-bootstrap-taginput/css/standard.css';
+import { tagItemTemplate } from './common';
 
 declare const _ALL_TAGS_MERGE: ITag[];
 
@@ -13,6 +12,7 @@ for (const tagInputElement of tagMergeInputElements) {
         getId: item => item.id,
         getLabel: item => item.label,
         allowNewTags: false,
-        minCharsBeforeShowingSuggestions: 1
+        minCharsBeforeShowingSuggestions: 1,
+        itemTemplate: tagItemTemplate
     });
 }

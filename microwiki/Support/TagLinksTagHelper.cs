@@ -20,7 +20,7 @@ namespace MicroWiki.Support
             = "tag-links";
 
         public string TagClasses { get; set; }
-            = "badge badge-primary";
+            = "badge bg-primary";
 
         [HtmlAttributeNotBound]
         [ViewContext]

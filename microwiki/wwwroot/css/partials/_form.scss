@@ -6,14 +6,10 @@
     color: #cc0000;
 }
 
-button .fa {
+button [class^=bi-] {
     margin-right: 6px;
 }
 
 textarea[name=Body] {
     font-family: Courier New, Courier, monospace;
-}
-
-.navbar input[type=search] {
-    width: 400px;
 }

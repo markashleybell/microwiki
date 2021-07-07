@@ -41,6 +41,9 @@ namespace MicroWiki.Models
         public string TagDataJson =>
             AllTags?.AsTagJson(t => t.Label);
 
+        public string FilenamePrefix =>
+            ID.ToString();
+
         public static UpdateViewModel From(Document document, IEnumerable<Tag> allTags) =>
             new UpdateViewModel {
                 ID = document.ID,

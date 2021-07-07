@@ -22,19 +22,22 @@ namespace MicroWiki
 
         public void ConfigureServices(IServiceCollection services)
         {
+            const string authenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
             var connectionString = Configuration.GetValue<string>("ConnectionString");
-            var authenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 
             services.AddHttpContextAccessor();
 
             services.Configure<Settings>(Configuration);
 
             services.Configure<CookiePolicyOptions>(options => {
-                options.CheckConsentNeeded = context => false;
-                options.MinimumSameSitePolicy = SameSiteMode.Lax;
+                options.CheckConsentNeeded = _ => false;
+                options.MinimumSameSitePolicy = SameSiteMode.Strict;
                 options.HttpOnly = HttpOnlyPolicy.Always;
                 options.Secure = CookieSecurePolicy.Always;
             });
+
+            services.AddRouting(options => options.LowercaseUrls = true);
 
             services.AddAuthentication(authenticationScheme)
                 .AddCookie(authenticationScheme, options => {
@@ -81,7 +84,7 @@ namespace MicroWiki
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "wiki/{action}/{id?}",
-                    defaults: new { controller = "Wiki", action = "Index" }
+                    defaults: new { controller = "Wiki", action = "Read" }
                 );
 
                 endpoints.MapControllerRoute(

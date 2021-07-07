@@ -17,43 +17,38 @@
 
     @RenderSection("title")
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 
     <link rel="stylesheet" href="~/css/site.css" />
 
     @RenderSection("css", required: false)
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="~/">@configuration.ApplicationTitle</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" asp-route="read" asp-route-location="/">@configuration.ApplicationTitle</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse justify-content-end" id="main-nav">
-                <form class="form-inline" method="get" asp-action="Index" asp-controller="Search">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="query" value="@ViewBag.SearchQuery">
-                    <button class="btn btn-info my-2 my-sm-0" type="submit">Search</button>
-                </form>
-                <ul class="navbar-nav ml-sm-3">
+            <div class="collapse navbar-collapse" id="main-nav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3">
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="Wiki" asp-action="Contents">Contents</a>
                     </li>
                     @if (User.Identity.IsAuthenticated)
                     {
-
-                        <li class="nav-item dropdown mr-md-4">
-                            <a class="nav-link dropdown-toggle" href="#" id="tags-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Tags
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="tags-dropdown">
-                                <a class="dropdown-item" asp-controller="Tags" asp-action="Index">All Tags</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" asp-controller="Tags" asp-action="Manage">Manage Tags</a>
-                            </div>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Tags" asp-action="Index">All Tags</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" asp-controller="Tags" asp-action="Manage">Manage Tags</a>
+                        </li>
+                    }
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item ms-lg-4">
                             <span class="nav-link active">@User.Identity.Name</span>
                         </li>
                         <li class="nav-item">
@@ -67,6 +62,10 @@
                         </li>
                     }
                 </ul>
+                <form class="d-flex flex-column d-lg-flex flex-lg-row">
+                    <input class="form-control me-2 mb-2 mb-lg-0" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
             </div>
         </div>
     </nav>
@@ -76,12 +75,6 @@
     </div>
 
     @RenderSection("modals", required: false)
-
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js" integrity="sha256-sPB0F50YUDK0otDnsfNHawYmA5M0pjjUf4TvRJkGFrI=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js" integrity="sha256-9GycpJnliUjJDVDqP0UEu/bsm9U+3dnQUH8+3W10vkY=" crossorigin="anonymous"></script>
 
     @RenderSection("globals", required: false)
 

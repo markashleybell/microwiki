@@ -1,0 +1,26 @@
+.tag-cloud {
+    padding: 30px 0;
+    text-align: center;
+
+    a:link, a:visited, a:hover, a:active {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    a.bg-primary:hover {
+        background-color: darken(#0d6efd, 20%) !important;
+    }
+
+    a.bg-secondary:hover {
+        background-color: darken(#6c757d, 20%) !important;
+    }
+
+    > .badge {
+        font-size: 1rem;
+        margin: 5px 5px;
+
+        > .badge {
+            margin-left: 10px;
+        }
+    }
+}

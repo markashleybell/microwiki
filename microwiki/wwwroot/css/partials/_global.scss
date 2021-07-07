@@ -1,14 +1,16 @@
-$main-background-color: #f8f8f8;
+@import 'variables';
 
 body {
     background-color: $main-background-color;
     padding-bottom: 60px;
 }
 
-.breadcrumb {
-    background-color: #dedede;
-}
-
 .nav-tabs .nav-link.active {
     background-color: $main-background-color;
+}
+
+@media only screen and (min-width: 1300px) {
+    .navbar input[type=search] {
+        width: 400px;
+    }
 }

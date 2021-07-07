@@ -1,4 +1,3 @@
-const ProvidePlugin = require('webpack').ProvidePlugin;
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
@@ -8,34 +7,25 @@ module.exports = {
         library: 'MicroWiki'
     },
     entry: {
-        'edit': './wwwroot/js/edit.ts',
-        'read': './wwwroot/js/read.ts',
-        'tagmanager': './wwwroot/js/tagmanager.ts',
-        'upload': './wwwroot/js/upload.ts'
+        'edit': './wwwroot/js/src/edit.ts',
+        'read': './wwwroot/js/src/read.ts',
+        'tagmanager': './wwwroot/js/src/tagmanager.ts',
+        'upload': './wwwroot/js/src/upload.ts'
     },
     devtool: 'source-map',
     plugins: [
-        new CleanWebpackPlugin(),
-        // This automatically adds aliases to the application scope for the specified packages
-        // So packages which look for the 'jQuery' global alias still work within our app closure
-        new ProvidePlugin({
-            $: 'jquery',
-            jQuery: 'jquery'
-        })
+        new CleanWebpackPlugin()
     ],
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.json']
+        extensions: ['.ts', '.tsx', '.js']
     },
     module: {
         rules: [
-            // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'
-            { test: /\.tsx?$/, exclude: /node_modules/, loader: 'ts-loader' },
-            // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'
-            { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
-            { test: /\.css$/i, use: ['style-loader', 'css-loader'] }
+            {
+                test: /\.ts(x)?$/,
+                loader: 'ts-loader',
+                exclude: /node_modules/
+            }
         ]
-    },
-    externals: {
-        jquery: 'jQuery'
     }
 };

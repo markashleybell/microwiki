@@ -1,0 +1,94 @@
+﻿.mab-bootstrap-taginput {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    cursor: text;
+}
+
+.mab-bootstrap-taginput.form-control {
+    line-height: normal;
+    height: auto;
+    padding-top: 0;
+}
+
+.mab-bootstrap-taginput-tag {
+    color: #fff;
+    background-color: #007bff;
+    display: inline-flex;
+    align-items: center;
+    padding: .15em .4em;
+    font-size: 90%;
+    font-weight: 700;
+    white-space: nowrap;
+    border-radius: .25rem;
+    margin-top: .375rem;
+    margin-right: 5px;
+    transition: background-color 1600ms ease-in;
+}
+
+.mab-bootstrap-taginput-tag .bi-x {
+    margin-left: 5px;
+    font-size: 90%;
+    cursor: pointer;
+    display: flex;
+}
+
+.mab-bootstrap-taginput-tag-warning {
+    background-color:#cc0000;
+    transition: none;
+}
+
+.mab-bootstrap-taginput-input {
+    border: solid 1px transparent;
+    outline: none;
+    width: 100px;
+    text-transform: lowercase;
+    padding: 0;
+    margin-top: .375rem;
+}
+
+.mab-bootstrap-taginput-input.mab-bootstrap-taginput-input-multicase {
+    text-transform: none;
+}
+
+.mab-bootstrap-taginput-input.mab-bootstrap-taginput-input-narrowed {
+    width: 1px;
+}
+
+.mab-bootstrap-taginput-input-container {
+    position: relative;
+}
+
+.mab-bootstrap-taginput-suggestions {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    min-width: 200px;
+    min-height: 30px;
+    background-color: #fff;
+    border: solid 1px #e0e0e0;
+    border-radius: 3px;
+    padding: 3px 0;
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
+    z-index: 10000;
+}
+
+.mab-bootstrap-taginput-suggestions-hidden {
+    display: none;
+}
+
+.mab-bootstrap-taginput-suggestion {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.mab-bootstrap-taginput-suggestion-selected,
+.mab-bootstrap-taginput-suggestion:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+/* Project-specific */
+.tag-input.form-control:read-only, .tag-input-merge.form-control:read-only {
+    background-color: #fff;
+}

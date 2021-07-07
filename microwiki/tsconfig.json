@@ -1,23 +1,12 @@
 {
-    "include": [
-        "./wwwroot/js/**/*.ts"
-    ],
+    "extends": "@tsconfig/recommended/tsconfig.json",
+
     "compilerOptions": {
-        "target": "es5",
-        "sourceMap": true,
-        "noImplicitAny": true,
-        "noEmitOnError": true,
-        "module": "esnext",
-        "moduleResolution": "node",
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "downlevelIteration": true,
-        "lib": [
-            "dom",
-            "dom.iterable",
-            "es5",
-            "scripthost"
-        ]
+        "strictFunctionTypes": false,
+        "strictNullChecks": false,
+        "sourceMap": true
     },
-    "compileOnSave": false
+
+    "include": [ "./wwwroot/js/src/**/*.ts" ],
+    "exclude": [ "node_modules" ]
 }

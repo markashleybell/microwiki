@@ -33,7 +33,7 @@ namespace MicroWiki.Concrete
             );
         }
 
-        public async Task<string> UploadFile(IFormFile file)
+        public async Task<string> UploadFile(IFormFile file, Func<string, string> fileNameTransform = null)
         {
             if (file == null)
             {
@@ -45,12 +45,14 @@ namespace MicroWiki.Concrete
                 throw new ArgumentOutOfRangeException(nameof(file), "File has zero length.");
             }
 
+            var transform = fileNameTransform ?? new Func<string, string>(s => s);
+
             var sourcePath = file.FileName;
 
-            var destinationFilePathOriginal = Path.Combine(_imageLibraryPhysicalPath, Path.GetFileName(sourcePath));
+            var destinationFilePathOriginal = Path.Combine(_imageLibraryPhysicalPath, transform(Path.GetFileName(sourcePath)));
 
             var destinationFilePath = File.Exists(destinationFilePathOriginal)
-                ? Path.Combine(_imageLibraryPhysicalPath, $"{Path.GetFileNameWithoutExtension(sourcePath)}-{GetUniqueCode()}{Path.GetExtension(sourcePath)}")
+                ? Path.Combine(_imageLibraryPhysicalPath, $"{transform(Path.GetFileNameWithoutExtension(sourcePath))}-{GetUniqueCode()}{Path.GetExtension(sourcePath)}")
                 : destinationFilePathOriginal;
 
             using (var stream = new FileStream(destinationFilePath, FileMode.CreateNew))

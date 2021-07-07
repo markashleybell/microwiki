@@ -1,5 +1,31 @@
 import * as CodeMirror from 'codemirror';
 
+/* BEGIN Private Interfaces */
+
+interface ICodeMirrorSelection {
+    line: number;
+    lineText: string;
+    start: CodeMirror.Position;
+    end: CodeMirror.Position;
+    selectedText: string;
+}
+
+interface IFormattingOperation {
+    [key: string]: (cm: CodeMirror.Editor, format: IEditorFormat, data?: any) => void;
+    apply: (cm: CodeMirror.Editor, format: IEditorFormat, data?: any) => void;
+    remove: (cm: CodeMirror.Editor, format: IEditorFormat, data?: any) => void;
+}
+
+interface IFormattingOperations {
+    [key: string]: IFormattingOperation;
+    inline: IFormattingOperation;
+    block: IFormattingOperation;
+}
+
+/* END Private Interfaces */
+
+/* BEGIN Public Interfaces */
+
 export interface IEditorFormat {
     type: string;
     token?: string;
@@ -36,6 +62,61 @@ export interface IEditorFormatTokens {
     comment: string;
 }
 
+export interface IHtmlLinkProperties {
+    linkText: string;
+    href: string;
+    linkTitle?: string;
+}
+
+export interface IHtmlImageProperties {
+    alt: string;
+    url: string;
+}
+
+export interface ICodeBlockProperties {
+    language: string;
+}
+
+export interface ICursorFormat {
+    [key: string]: boolean;
+    link: boolean;
+    link_label: boolean;
+    link_href: boolean;
+    h1: boolean;
+    h2: boolean;
+    h3: boolean;
+    bold: boolean;
+    italic: boolean;
+    strikethrough: boolean;
+    code: boolean;
+    ol: boolean;
+    ul: boolean;
+}
+
+export interface ICursorState {
+    token: CodeMirror.Token;
+    format: ICursorFormat;
+}
+
+/* END Public Interfaces */
+
+/* BEGIN Private Constants */
+
+const operations: IFormattingOperations = {
+    inline: {
+        apply: inlineApply,
+        remove: inlineRemove
+    },
+    block: {
+        apply: blockApply,
+        remove: blockRemove
+    }
+};
+
+/* END Private Constants */
+
+/* BEGIN Public Constants */
+
 export const EditorFormats: IEditorFormats = {
     h1: { type: 'block', token: 'header-1', before: '#', re: /^#\s+/, placeholder: 'Heading' },
     h2: { type: 'block', token: 'header-2', before: '##', re: /^##\s+/, placeholder: 'Heading' },
@@ -61,34 +142,9 @@ export const EditorFormatTokens: IEditorFormatTokens = {
     'comment': 'code'
 };
 
-export interface ICursorFormat {
-    [key: string]: boolean;
-    link: boolean;
-    link_label: boolean;
-    link_href: boolean;
-    h1: boolean;
-    h2: boolean;
-    h3: boolean;
-    bold: boolean;
-    italic: boolean;
-    strikethrough: boolean;
-    code: boolean;
-    ol: boolean;
-    ul: boolean;
-}
+/* END Public Constants */
 
-export interface ICursorState {
-    token: CodeMirror.Token;
-    format: ICursorFormat;
-}
-
-interface ICodeMirrorSelection {
-    line: number;
-    lineText: string;
-    start: CodeMirror.Position;
-    end: CodeMirror.Position;
-    selectedText: string;
-}
+/* BEGIN Private Functions */
 
 function createEmptyCursorState(): ICursorState {
     return {
@@ -170,12 +226,14 @@ function getCursorState(cm: CodeMirror.Editor) {
     const pos = cm.getCursor('start');
     const cs = createEmptyCursorState();
     const token = cs.token = cm.getTokenAt(pos);
+
     if (!token.type) {
         return cs;
     }
+
     const tokens = token.type.split(' ');
+
     tokens.forEach(t => {
-        // console.log(t);
         if (EditorFormatTokens[t]) {
             cs.format[EditorFormatTokens[t]] = true;
             return;
@@ -199,8 +257,13 @@ function getCursorState(cm: CodeMirror.Editor) {
                 break;
         }
     });
+
     return cs;
 }
+
+/* END Private Functions */
+
+/* BEGIN Public Functions */
 
 export function inlineApply(cm: CodeMirror.Editor, format: IEditorFormat) {
     const sel = getCmSelection(cm);
@@ -286,33 +349,10 @@ export function codeBlockApply(cm: CodeMirror.Editor, data: ICodeBlockProperties
 }
 
 export function imageApply(cm: CodeMirror.Editor, data: IHtmlImageProperties) {
-    cm.replaceSelection('![' + data.alt + '](' + data.url + ')');
+    cm.replaceSelection('![' + (data.alt || '') + '](' + data.url + ')');
 
     cm.focus();
 }
-
-interface IFormattingOperation {
-    [key: string]: (cm: CodeMirror.Editor, format: IEditorFormat, data?: any) => void;
-    apply: (cm: CodeMirror.Editor, format: IEditorFormat, data?: any) => void;
-    remove: (cm: CodeMirror.Editor, format: IEditorFormat, data?: any) => void;
-}
-
-interface IFormattingOperations {
-    [key: string]: IFormattingOperation;
-    inline: IFormattingOperation;
-    block: IFormattingOperation;
-}
-
-const operations: IFormattingOperations = {
-    inline: {
-        apply: inlineApply,
-        remove: inlineRemove
-    },
-    block: {
-        apply: blockApply,
-        remove: blockRemove
-    }
-};
 
 export function applyFormat(cm: CodeMirror.Editor, key: string, data?: any) {
     const cs = getCursorState(cm);
@@ -321,28 +361,13 @@ export function applyFormat(cm: CodeMirror.Editor, key: string, data?: any) {
     operations[format.type][(cs.format[key] ? 'remove' : 'apply')](cm, format, data);
 }
 
-export interface IHtmlLinkProperties {
-    linkText: string;
-    href: string;
-    linkTitle?: string;
-}
-
-export interface IHtmlImageProperties {
-    alt: string;
-    url: string;
-}
-
-export interface ICodeBlockProperties {
-    language: string;
-}
-
 export function getLinkData(cm: CodeMirror.Editor): IHtmlLinkProperties {
     const pos = cm.getCursor('start');
     const token = cm.getTokenAt(pos);
 
     let data: IHtmlLinkProperties = null;
 
-    if (token.type && (token.type === 'link' || token.type.indexOf('url') > -1)) {
+    if (token.type && (token.type.indexOf('link') > -1 || token.type.indexOf('url') > -1)) {
         const startPoint = cm.getCursor('start');
         const endPoint = cm.getCursor('end');
         const line = cm.getLine(startPoint.line);
@@ -407,7 +432,7 @@ export function getImageData(cm: CodeMirror.Editor): IHtmlImageProperties {
 
     let data: IHtmlImageProperties = null;
 
-    if (token.type && (token.type === 'link' || token.type.indexOf('url') > -1)) {
+    if (token.type && (token.type.indexOf('image') > -1 || token.type.indexOf('url') > -1)) {
         const startPoint = cm.getCursor('start');
         const endPoint = cm.getCursor('end');
         const line = cm.getLine(startPoint.line);
@@ -453,3 +478,5 @@ export function getImageData(cm: CodeMirror.Editor): IHtmlImageProperties {
 export function createImage(cm: CodeMirror.Editor, properties: IHtmlImageProperties) {
     imageApply(cm, properties);
 }
+
+/* END Public Functions */

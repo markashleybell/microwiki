@@ -41,9 +41,11 @@ namespace MicroWiki.Controllers
                 return RedirectToAction(nameof(Upload));
             }
 
-            var uploadedFilePath = await _fileManager.UploadFile(file);
+            var uploadedFilePath = await _fileManager.UploadFile(file, fn => $"{model.FileNamePrefix}-{fn}");
 
-            return RedirectToAction(nameof(Upload), new { UploadedFileName = uploadedFilePath });
+            return HttpContext.Request.Headers["X-Requested-With"] != "XMLHttpRequest"
+                ? RedirectToAction(nameof(Upload), new { UploadedFileName = uploadedFilePath })
+                : Json(new { UploadedFileName = uploadedFilePath });
         }
 
         [HttpPost]

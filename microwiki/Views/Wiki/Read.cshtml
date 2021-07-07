@@ -24,8 +24,7 @@
         @if (Model.Children.Any())
         {
             <ul class="toc">
-                @foreach (var child in Model.Children
-                  .Where(c => c.IsPublic || User.Identity.IsAuthenticated))
+                @foreach (var child in Model.Children.Where(c => c.IsPublic || User.Identity.IsAuthenticated))
                 {
                     <li><a href="@child.Location">@child.Title</a> &raquo;</li>
                 }
@@ -36,31 +35,44 @@
     <div class="@ActionColumnClasses">
         @if (User.Identity.IsAuthenticated)
         {
-            <p>@Html.ActionLink("Edit This Page", "Update", new { id = Model.ID }, new { @class = ActionButtonClasses })</p>
+            <div class="d-grid gap-2">
+                @Html.ActionLink("Edit This Page", "Update", new { id = Model.ID }, new { @class = ActionButtonClasses })
 
-            <p>@Html.ActionLink("New Child Page", "Create", new { parentID = Model.ID }, new { @class = ActionButtonClasses })</p>
+                @Html.ActionLink("New Child Page", "Create", new { parentID = Model.ID }, new { @class = ActionButtonClasses })
 
-            @if (!Model.IsRootDocument)
-            {
-                <p>
+                @if (!Model.IsRootDocument)
+                {
                     <a id="move-document-button" href="#move-document-modal" data-id="@Model.ID" data-title="@Model.Title" class="@ActionButtonClasses">Move This Page</a>
-                </p>
-            }
+                }
+            </div>
 
             @if (!Model.IsRootDocument)
             {
-                <form asp-controller="Wiki" asp-action="Delete" method="post">
-                    <p>
-                        @Html.HiddenFor(x => x.ID)
-                        <button class="@DeleteButtonClasses delete-page" data-pagetitle="@Model.Title">Delete This Page</button>
-                    </p>
+                <form asp-controller="Wiki" asp-action="Delete" method="post" class="mt-4 d-grid gap-2">
+                    @Html.HiddenFor(x => x.ID)
+                    <button class="@DeleteButtonClasses delete-page" data-pagetitle="@Model.Title">Delete This Page</button>
                 </form>
             }
         }
     </div>
 </div>
 
-<div class="modal" id="move-document-modal" tabindex="-1" role="dialog"></div>
+@section modals {
+    <div class="modal" id="move-document-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Move Document</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 @section scripts {
     <script src="~/js/dist/read.js" asp-append-version="true"></script>

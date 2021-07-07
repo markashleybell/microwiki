@@ -16,6 +16,9 @@ namespace MicroWiki.Models
         }
 
         [Required]
+        public Guid ID { get; set; }
+
+        [Required]
         public Guid? ParentID { get; set; }
 
         public string ParentTitle { get; set; }
@@ -39,8 +42,12 @@ namespace MicroWiki.Models
         public string TagDataJson =>
             AllTags?.AsTagJson(t => t.Label);
 
+        public string FilenamePrefix =>
+            ID.ToString();
+
         public static CreateViewModel From(Document parentDocument, IEnumerable<Tag> allTags) =>
             new CreateViewModel {
+                ID = Guid.NewGuid(),
                 ParentID = parentDocument.ParentID,
                 ParentTitle = parentDocument.Title,
                 AllTags = allTags,
@@ -49,7 +56,7 @@ namespace MicroWiki.Models
 
         public static Document ToDocument(CreateViewModel model) =>
             new Document(
-                Guid.NewGuid(),
+                model.ID,
                 model.ParentID,
                 model.Title,
                 model.Body,

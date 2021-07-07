@@ -1,8 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
-        <TypeScriptToolsVersion>4.1</TypeScriptToolsVersion>
         <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
         <LangVersion>latest</LangVersion>
         <CodeAnalysisRuleSet>..\microwiki.ruleset</CodeAnalysisRuleSet>
@@ -12,6 +11,7 @@
     <ItemGroup>
         <Content Remove="package-lock.json" />
         <Content Remove="wwwroot\usercontent\*.*" />
+        <Content Include="webpack.config.js" />
         <Content Include="wwwroot\usercontent\.gitignore" />
         <TypeScriptCompile Remove="node_modules\**" />
     </ItemGroup>

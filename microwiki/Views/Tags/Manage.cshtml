@@ -13,14 +13,12 @@
         @foreach (var tag in Model.Tags)
         {
             <form asp-action="Merge" method="post">
-                <div class="form-group row">
+                <div class="form-group row mb-2">
                     <label class="col-3 col-form-label" for="tag-@(tag.ID)-edit">@(tag.Label) (@(tag.UseCount))</label>
-                    <div class="col-7">
+                    <div class="col-9 d-flex">
                         <input type="text" name="MergeTagIDs" class="form-control tag-input-merge" id="tag-@(tag.ID)-edit" placeholder="Select tags..." />
                         <input type="hidden" name="TagID" value="@(tag.ID)" />
-                    </div>
-                    <div class="col-2">
-                        <input type="submit" class="@StandardButtonClasses" value="Merge" />
+                        <input type="submit" class="@StandardButtonClasses ms-2" value="Merge" />
                     </div>
                 </div>
             </form>
